@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Awakening Café Tokyo</title>
+
+  <style>
+    :root{
+      --bg:#f6f4ef;
+      --card:#ffffffcc;
+      --ink:#1f2a2e;
+      --muted:#55626a;
+      --line:#e7e1d6;
+      --accent:#6aa1a6;      /* calm teal */
+      --accent2:#d6b18b;     /* warm latte */
+      --shadow: 0 10px 30px rgba(18, 34, 38, .10);
+      --radius: 18px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+                   Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(106,161,166,.20), transparent 60%),
+        radial-gradient(900px 700px at 80% 20%, rgba(214,177,139,.18), transparent 55%),
+        linear-gradient(180deg, #fbfaf7 0%, var(--bg) 50%, #fbfaf7 100%);
+    }
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:1080px; margin:0 auto; padding:22px; }
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(246,244,239,.85), rgba(246,244,239,.55));
+      border-bottom:1px solid rgba(231,225,214,.7);
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      padding:14px 22px;
+      max-width:1080px; margin:0 auto;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width: 220px;
+    }
+    .logo{
+      width:42px; height:42px; border-radius:14px;
+      background:
+        radial-gradient(14px 14px at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,0) 60%),
+        linear-gradient(135deg, rgba(106,161,166,.95), rgba(214,177,139,.9));
+      box-shadow: 0 10px 20px rgba(0,0,0,.08);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-30%;
+      background: radial-gradient(circle at 60% 40%, rgba(255,255,255,.35), transparent 60%);
+      transform: rotate(20deg);
+    }
+    .brand h1{
+      font-size:16px; margin:0;
+      letter-spacing:.3px;
+      line-height:1.2;
+    }
+    .brand p{
+      margin:2px 0 0;
+      font-size:12px; color:var(--muted);
+    }
+
+    .nav{
+      display:flex; align-items:center; gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.6);
+      border:1px solid rgba(231,225,214,.8);
+      box-shadow: 0 6px 18px rgba(0,0,0,.06);
+      font-size:13px;
+      color:var(--muted);
+    }
+    .chip strong{ color:var(--ink); font-weight:600; }
+
+    .lang{
+      display:flex; gap:8px; align-items:center;
+      padding:6px;
+      border-radius:999px;
+      border:1px solid rgba(231,225,214,.9);
+      background: rgba(255,255,255,.65);
+      box-shadow: 0 6px 18px rgba(0,0,0,.06);
+    }
+    .lang button{
+      border:none; cursor:pointer;
+      padding:8px 12px;
+      border-radius:999px;
+      background: transparent;
+      color: var(--muted);
+      font-weight:600;
+      letter-spacing:.2px;
+    }
+    .lang button.active{
+      background: linear-gradient(135deg, rgba(106,161,166,.22), rgba(214,177,139,.18));
+      color: var(--ink);
+      box-shadow: inset 0 0 0 1px rgba(106,161,166,.25);
+    }
+
+    /* Hero */
+    .hero{
+      padding: 26px 0 10px;
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      align-items:stretch;
+    }
+    @media (max-width: 920px){
+      .hero{ grid-template-columns: 1fr; }
+      .brand{ min-width:auto; }
+    }
+    .card{
+      background: var(--card);
+      border:1px solid rgba(231,225,214,.85);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hero-left{
+      padding: 26px 22px;
+      position:relative;
+    }
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.7);
+      border:1px solid rgba(231,225,214,.95);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+    .hero-left h2{
+      margin: 14px 0 10px;
+      font-size: 34px;
+      line-height:1.15;
+      letter-spacing:.2px;
+    }
+    .hero-left p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height:1.85;
+      max-width: 58ch;
+    }
+    .actions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top: 18px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border:1px solid rgba(231,225,214,.95);
+      background: rgba(255,255,255,.75);
+      box-shadow: 0 10px 24px rgba(0,0,0,.08);
+      font-weight:700;
+      color: var(--ink);
+      cursor:pointer;
+      transition: transform .08s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(106,161,166,.30), rgba(214,177,139,.24));
+      border:1px solid rgba(106,161,166,.25);
+    }
+    .btn small{
+      font-weight:600;
+      color: var(--muted);
+    }
+
+    .hero-right{
+      display:grid;
+      grid-template-rows: auto auto;
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .mini{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .mini .tile{
+      border-radius: 16px;
+      border:1px solid rgba(231,225,214,.9);
+      background: rgba(255,255,255,.65);
+      padding: 14px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.06);
+    }
+    .tile h3{
+      margin: 0 0 6px;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    .tile p{
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height:1.55;
+    }
+
+    /* Sections */
+    section{ margin: 16px 0; }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 920px){ .grid{ grid-template-columns: 1fr; } }
+    .section-card{ padding: 20px 20px; }
+    .section-title{
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .section-title h3{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    .section-title span{
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,.55);
+      border:1px solid rgba(231,225,214,.8);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+    .section-card p{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: 14px;
+    }
+
+    /* Menu list */
+    .list{
+      margin-top: 10px;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 14px;
+    }
+    .list li{ margin: 4px 0; }
+    .quote{
+      margin-top: 12px;
+      padding: 14px 14px;
+      border-radius: 16px;
+      border:1px solid rgba(231,225,214,.9);
+      background: rgba(255,255,255,.65);
+      color: var(--ink);
+      line-height: 1.8;
+      box-shadow: 0 10px 24px rgba(0,0,0,.06);
+    }
+    .quote em{ color: var(--muted); font-style: normal; }
+
+    /* Footer */
+    footer{
+      margin: 18px 0 26px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align:center;
+    }
+
+    /* ===== Gallery slider ===== */
+    .gallery{
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      border:1px solid rgba(231,225,214,.9);
+      background: rgba(255,255,255,.55);
+      min-height: 320px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.06);
+    }
+    .slides{
+      display:flex;
+      height: 100%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .slides::-webkit-scrollbar{ display:none; }
+    .slide{
+      flex: 0 0 100%;
+      scroll-snap-align: center;
+      position: relative;
+    }
+    .slide img{
+      width:100%;
+      height: 360px;
+      object-fit: cover;
+      display:block;
+      filter: saturate(1.02) contrast(1.02);
+    }
+    @media (min-width: 920px){
+      .slide img{ height: 420px; }
+    }
+
+    .gbtn{
+      position:absolute;
+      top:50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(231,225,214,.9);
+      background: rgba(255,255,255,.78);
+      box-shadow: 0 10px 24px rgba(0,0,0,.10);
+      color: rgba(31,42,46,.85);
+      font-size: 26px;
+      line-height: 0;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+    }
+    .gbtn:hover{ filter: brightness(1.02); }
+    .gbtn:active{ transform: translateY(-50%) scale(.98); }
+    .gbtn.prev{ left: 10px; }
+    .gbtn.next{ right: 10px; }
+
+    .dots{
+      position:absolute;
+      left:0; right:0; bottom: 10px;
+      display:flex;
+      justify-content:center;
+      gap: 7px;
+      padding: 6px 10px;
+      pointer-events: none;
+    }
+    .dotbtn{
+      pointer-events: auto;
+      width: 8px; height: 8px;
+      border-radius: 99px;
+      border: 1px solid rgba(255,255,255,.85);
+      background: rgba(31,42,46,.20);
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .dotbtn.active{
+      background: rgba(255,255,255,.72);
+      transform: scale(1.25);
+    }
+
+    /* ===== Cross light overlay (subtle, premium) ===== */
+    .cross-light{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      mix-blend-mode: soft-light;
+      opacity: .55;
+      background:
+        radial-gradient(380px 280px at 72% 22%, rgba(255,255,255,.55), rgba(255,255,255,0) 62%),
+        linear-gradient(90deg,
+          rgba(255,255,255,0) 0%,
+          rgba(255,255,255,.20) 46%,
+          rgba(255,255,255,.32) 50%,
+          rgba(255,255,255,.20) 54%,
+          rgba(255,255,255,0) 100%),
+        linear-gradient(180deg,
+          rgba(255,255,255,0) 0%,
+          rgba(255,255,255,0) 32%,
+          rgba(255,255,255,.12) 44%,
+          rgba(255,255,255,.20) 48%,
+          rgba(255,255,255,.12) 52%,
+          rgba(255,255,255,0) 64%,
+          rgba(255,255,255,0) 100%);
+      filter: blur(.2px);
+    }
+    @media (max-width: 420px){
+      .gbtn{ width:38px; height:38px; }
+      .hero-left h2{ font-size: 30px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="topbar">
+      <div class="brand" aria-label="Brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1 id="brandTitle">Awakening Café Tokyo</h1>
+          <p id="brandTag">Healing • Peace • Welcome</p>
+        </div>
+      </div>
+
+      <div class="nav">
+        <a class="chip" href="#visit"><strong id="chipVisit">Visit</strong><span id="chipVisitSub">Info</span></a>
+        <a class="chip" href="#menu"><strong id="chipMenu">Menu</strong><span id="chipMenuSub">Drinks</span></a>
+        <a class="chip" href="#community"><strong id="chipCommunity">Community</strong><span id="chipCommunitySub">Events</span></a>
+
+        <div class="lang" role="group" aria-label="Language switch">
+          <button id="btnJa" class="active" type="button">日本語</button>
+          <button id="btnEn" type="button">English</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- HERO -->
+    <div class="hero">
+      <div class="card hero-left">
+        <div class="kicker">
+          <span class="dot" aria-hidden="true"></span>
+          <span id="kickerText">A calm place to breathe — in the heart of Tokyo</span>
+        </div>
+
+        <h2 id="heroTitle">A gentle café where your heart can rest.</h2>
+        <p id="heroDesc">
+          Awakening Café Tokyo is a welcoming space inspired by Christian values —
+          kindness, listening, and peace. Come as you are, slow down, and enjoy a quiet moment
+          with coffee and warmth.
+        </p>
+
+        <div class="actions">
+          <a class="btn primary" id="ctaInstagram" target="_blank" rel="noreferrer"
+             href="https://www.instagram.com/awakeningcafetokyo/">
+            <span id="ctaInstagramText">Open Instagram</span>
+            <small id="ctaInstagramSub">@awakeningcafetokyo</small>
+          </a>
+
+          <a class="btn" id="ctaMap" target="_blank" rel="noreferrer"
+             href="https://www.google.com/maps/search/?api=1&query=Awakening%20Cafe%20Tokyo">
+            <span id="ctaMapText">Open Map</span>
+            <small id="ctaMapSub">Get directions</small>
+          </a>
+
+          <a class="btn" id="ctaContact" href="#visit">
+            <span id="ctaContactText">Contact</span>
+            <small id="ctaContactSub">Hours & info</small>
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Gallery slider + subtle cross light -->
+      <div class="card hero-right">
+        <div class="gallery" aria-label="Photo gallery">
+          <div class="slides" id="slides">
+            <div class="slide"><img src="1.PNG" alt="Awakening Cafe photo 1"></div>
+            <div class="slide"><img src="2.PNG" alt="Awakening Cafe photo 2"></div>
+            <div class="slide"><img src="3.PNG" alt="Awakening Cafe photo 3"></div>
+            <div class="slide"><img src="4.PNG" alt="Awakening Cafe photo 4"></div>
+            <div class="slide"><img src="5.PNG" alt="Awakening Cafe photo 5"></div>
+            <div class="slide"><img src="6.PNG" alt="Awakening Cafe photo 6"></div>
+            <div class="slide"><img src="7.PNG" alt="Awakening Cafe photo 7"></div>
+          </div>
+
+          <div class="cross-light" aria-hidden="true"></div>
+
+          <button class="gbtn prev" id="prevBtn" type="button" aria-label="Previous">‹</button>
+          <button class="gbtn next" id="nextBtn" type="button" aria-label="Next">›</button>
+
+          <div class="dots" id="dots" aria-label="Slide dots"></div>
+        </div>
+
+        <div class="mini">
+          <div class="tile">
+            <h3 id="mini1Title">雰囲気</h3>
+            <p id="mini1Desc">やわらかな光と静かな空気。読書や心の整理にもおすすめです。</p>
+          </div>
+          <div class="tile">
+            <h3 id="mini2Title">ようこそ</h3>
+            <p id="mini2Desc">おひとりでも、友人と一緒でも。やさしくお迎えします。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTIONS -->
+    <section class="grid">
+      <div class="card section-card" id="menu">
+        <div class="section-title">
+          <h3 id="menuTitle">メニューのおすすめ</h3>
+          <span id="menuTag">コーヒー • お茶 • スイーツ</span>
+        </div>
+        <p id="menuDesc">
+          気持ちがほどける、やさしい味わいを大切にしています。（下の項目は例なので、実メニューに置き換えてください。）
+        </p>
+        <ul class="list" id="menuList">
+          <li>ハンドドリップ / エスプレッソドリンク</li>
+          <li>ラテ（Hot/Iced）/ 季節のスペシャル</li>
+          <li>ハーブティー / やさしいミルクティー</li>
+          <li>手作りスイーツ / 軽食</li>
+        </ul>
+        <div class="quote" id="menuQuote">
+          <div id="menuQuoteLine1">「深呼吸して、大丈夫。」</div>
+          <em id="menuQuoteLine2">小さな休憩が、新しい始まりになることも。</em>
+        </div>
+      </div>
+
+      <div class="card section-card" id="community">
+        <div class="section-title">
+          <h3 id="communityTitle">コミュニティと時間</h3>
+          <span id="communityTag">やさしい集い</span>
+        </div>
+        <p id="communityDesc">
+          Awakening Café はカフェであると同時に、小さなコミュニティスペースでもあります。静かな会話、読書、少人数の分かち合いなどを歓迎します。
+        </p>
+        <ul class="list" id="communityList">
+          <li>静かな読書 / 学びの時間</li>
+          <li>少人数のシェア会</li>
+          <li>祈り・黙想の時間（任意）</li>
+          <li>自分のペースでの会話</li>
+        </ul>
+        <div class="quote" id="communityQuote">
+          <div id="communityQuoteLine1">やさしさが、ここでの言葉です。</div>
+          <em id="communityQuoteLine2">ただ来て、休んでください。</em>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" id="visit">
+      <div class="card section-card">
+        <div class="section-title">
+          <h3 id="visitTitle">ご来店情報</h3>
+          <span id="visitTag">営業時間 • アクセス</span>
+        </div>
+        <p id="visitDesc">
+          下記は例です。公式情報に差し替えてください。
+        </p>
+        <ul class="list">
+          <li><strong id="addressLabel">住所：</strong> <span id="addressText">Awakening Café Kitaueno 2-23-9 イチロービル4F, Taito-ku, Tokyo, Japan 1100014</span></li>
+          <li><strong id="accessLabel">アクセス：</strong> <span id="accessText">入谷駅から徒歩3分</span></li>
+          <li><strong id="hoursLabel">営業時間：</strong> <span id="hoursText">火〜土 08:00–18:00</span></li>
+        </ul>
+        <div class="actions" style="margin-top:12px;">
+          <a class="btn primary" target="_blank" rel="noreferrer"
+             href="https://www.instagram.com/awakeningcafetokyo/" id="visitIG">
+            <span id="visitIGText">Instagram で最新情報</span>
+            <small id="visitIGSub">投稿・ストーリー</small>
+          </a>
+          <a class="btn" target="_blank" rel="noreferrer"
+             href="https://www.google.com/maps/search/?api=1&query=Awakening%20Cafe%20Tokyo" id="visitMaps">
+            <span id="visitMapsText">Google マップで開く</span>
+            <small id="visitMapsSub">ナビ</small>
+          </a>
+        </div>
+      </div>
+
+      <div class="card section-card">
+        <div class="section-title">
+          <h3 id="inviteTitle">やさしい招き</h3>
+          <span id="inviteTag">平安</span>
+        </div>
+        <p id="inviteDesc">
+          街の忙しさが重く感じるとき、どうぞ静かな席へ。あたたかな飲み物と、やわらかな光、そして聴く空間を用意しています。
+        </p>
+        <div class="quote" id="inviteQuote">
+          <div id="inviteQuoteLine1">「そのままで来てください。」</div>
+          <em id="inviteQuoteLine2">ゆっくり、息をして、安心してください。</em>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div id="footerText">© Awakening Café Tokyo</div>
+    </footer>
+  </main>
+
+  <script>
+    // ===== Language data =====
+    const data = {
+      ja: {
+        brandTag: "癒し • 安心 • ようこそ",
+        chipVisit: "ご案内", chipVisitSub: "アクセス",
+        chipMenu: "メニュー", chipMenuSub: "ドリンク",
+        chipCommunity: "コミュニティ", chipCommunitySub: "集い",
+        kickerText: "東京の真ん中で、深呼吸できる場所",
+        heroTitle: "心がほっと休める、やさしいカフェ。",
+        heroDesc:
+          "Awakening Café Tokyo は、キリスト教の価値観（思いやり・傾聴・平安）にインスパイアされた、あたたかな空間です。ありのままで来て、静かなひとときをお過ごしください。",
+        ctaInstagramText: "Instagram を開く", ctaInstagramSub: "@awakeningcafetokyo",
+        ctaMapText: "地図を開く", ctaMapSub: "行き方",
+        ctaContactText: "お問い合わせ", ctaContactSub: "営業時間など",
+
+        mini1Title: "雰囲気",
+        mini1Desc: "やわらかな光と静かな空気。読書や心の整理にもおすすめです。",
+        mini2Title: "ようこそ",
+        mini2Desc: "おひとりでも、友人と一緒でも。やさしくお迎えします。",
+
+        menuTitle: "メニューのおすすめ",
+        menuTag: "コーヒー • お茶 • スイーツ",
+        menuDesc:
+          "気持ちがほどける、やさしい味わいを大切にしています。（下の項目は例なので、実メニューに置き換えてください。）",
+        menuList: [
+          "ハンドドリップ / エスプレッソドリンク",
+          "ラテ（Hot/Iced）/ 季節のスペシャル",
+          "ハーブティー / やさしいミルクティー",
+          "手作りスイーツ / 軽食"
+        ],
+        menuQuoteLine1: "「深呼吸して、大丈夫。」",
+        menuQuoteLine2: "小さな休憩が、新しい始まりになることも。",
+
+        communityTitle: "コミュニティと時間",
+        communityTag: "やさしい集い",
+        communityDesc:
+          "Awakening Café はカフェであると同時に、小さなコミュニティスペースでもあります。静かな会話、読書、少人数の分かち合いなどを歓迎します。",
+        communityList: [
+          "静かな読書 / 学びの時間",
+          "少人数のシェア会",
+          "祈り・黙想の時間（任意）",
+          "自分のペースでの会話"
+        ],
+        communityQuoteLine1: "やさしさが、ここでの言葉です。",
+        communityQuoteLine2: "ただ来て、休んでください。",
+
+        visitTitle: "ご来店情報",
+        visitTag: "営業時間 • アクセス",
+        visitDesc: "下記は例です。公式情報に差し替えてください。",
+        addressLabel: "住所：",
+        addressText: "東京都（正確な住所に差し替え）",
+        accessLabel: "アクセス：",
+        accessText: "（駅名）から徒歩3分（例）",
+        hoursLabel: "営業時間：",
+        hoursText: "火〜土 08:00–18:00（例）",
+        closedLabel: "定休日：",
+        closedText: "日・月（例）",
+        visitIGText: "Instagram で最新情報",
+        visitIGSub: "投稿・ストーリー",
+        visitMapsText: "Google マップで開く",
+        visitMapsSub: "ナビ",
+
+        inviteTitle: "やさしい招き",
+        inviteTag: "平安",
+        inviteDesc:
+          "街の忙しさが重く感じるとき、どうぞ静かな席へ。あたたかな飲み物と、やわらかな光、そして聴く空間を用意しています。",
+        inviteQuoteLine1: "「そのままで来てください。」",
+        inviteQuoteLine2: "ゆっくり、息をして、安心してください。",
+
+        footerText: "© Awakening Café Tokyo"
+      },
+
+      en: {
+        brandTag: "Healing • Peace • Welcome",
+        chipVisit: "Visit", chipVisitSub: "Info",
+        chipMenu: "Menu", chipMenuSub: "Drinks",
+        chipCommunity: "Community", chipCommunitySub: "Events",
+        kickerText: "A calm place to breathe — in the heart of Tokyo",
+        heroTitle: "A gentle café where your heart can rest.",
+        heroDesc:
+          "Awakening Café Tokyo is a welcoming space inspired by Christian values — kindness, listening, and peace. Come as you are, slow down, and enjoy a quiet moment with coffee and warmth.",
+        ctaInstagramText: "Open Instagram", ctaInstagramSub: "@awakeningcafetokyo",
+        ctaMapText: "Open Map", ctaMapSub: "Get directions",
+        ctaContactText: "Contact", ctaContactSub: "Hours & info",
+
+        mini1Title: "Atmosphere",
+        mini1Desc: "Soft light, quiet mood — ideal for reading and reflection.",
+        mini2Title: "Welcome",
+        mini2Desc: "Whether you’re alone or with friends, you’re always received with kindness.",
+
+        menuTitle: "Menu highlights",
+        menuTag: "Coffee • Tea • Sweets",
+        menuDesc:
+          "Simple, comforting flavors. We focus on drinks and snacks that help you slow down. (Replace the items below with your real menu.)",
+        menuList: [
+          "Hand-drip coffee / Espresso drinks",
+          "Latte (hot/iced) / Seasonal special",
+          "Herbal tea / Gentle milk tea",
+          "Homemade sweets / Light meals"
+        ],
+        menuQuoteLine1: "“Take a breath. You are not alone.”",
+        menuQuoteLine2: "A small pause can be a new beginning.",
+
+        communityTitle: "Community & moments",
+        communityTag: "Gentle gatherings",
+        communityDesc:
+          "Awakening Café is not only a café, but also a small community space. We welcome quiet conversations, reading time, and small sharing gatherings.",
+        communityList: [
+          "Quiet reading time / Study",
+          "Small sharing circles",
+          "Time for prayer & reflection (optional)",
+          "Friendly conversations, at your pace"
+        ],
+        communityQuoteLine1: "Kindness is our language.",
+        communityQuoteLine2: "You can simply come and rest.",
+
+        visitTitle: "Visit information",
+        visitTag: "Hours • Access",
+        visitDesc: "Please replace the details below with the café’s official information.",
+        addressLabel: "Address:",
+        addressText: "Awakening Café Kitaueno 2-23-9 イチロービル4F, Taito-ku, Tokyo, Japan 1100014",
+        accessLabel: "Access:",
+        accessText: "3 min walk from (Iriya Station)",
+        hoursLabel: "Hours:",
+        hoursText: "Tue–Sat 08:00–18:00",
+        closedLabel: "Closed:",
+        closedText: "Sun",
+        visitIGText: "Instagram updates",
+        visitIGSub: "New posts & stories",
+        visitMapsText: "Open in Google Maps",
+        visitMapsSub: "Navigate",
+
+        inviteTitle: "A gentle invitation",
+        inviteTag: "Peace",
+        inviteDesc:
+          "When the city feels heavy, come and take a quiet seat. A warm drink, soft light, and a listening space — that’s what we hope to offer.",
+        inviteQuoteLine1: "“Come as you are.”",
+        inviteQuoteLine2: "Slow down. Breathe. Be cared for.",
+
+        footerText: "© Awakening Café Tokyo — Simple landing page template (JP/EN)"
+      }
+    };
+
+    const ids = [
+      "brandTag",
+      "chipVisit","chipVisitSub",
+      "chipMenu","chipMenuSub",
+      "chipCommunity","chipCommunitySub",
+      "kickerText",
+      "heroTitle","heroDesc",
+      "ctaInstagramText","ctaInstagramSub",
+      "ctaMapText","ctaMapSub",
+      "ctaContactText","ctaContactSub",
+      "mini1Title","mini1Desc",
+      "mini2Title","mini2Desc",
+      "menuTitle","menuTag","menuDesc",
+      "menuQuoteLine1","menuQuoteLine2",
+      "communityTitle","communityTag","communityDesc",
+      "communityQuoteLine1","communityQuoteLine2",
+      "visitTitle","visitTag","visitDesc",
+      "addressLabel","addressText",
+      "accessLabel","accessText",
+      "hoursLabel","hoursText",
+      "closedLabel","closedText",
+      "visitIGText","visitIGSub",
+      "visitMapsText","visitMapsSub",
+      "inviteTitle","inviteTag","inviteDesc",
+      "inviteQuoteLine1","inviteQuoteLine2",
+      "footerText"
+    ];
+
+    function setLang(lang){
+      document.getElementById("btnJa").classList.toggle("active", lang === "ja");
+      document.getElementById("btnEn").classList.toggle("active", lang === "en");
+
+      ids.forEach(id=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+        el.textContent = data[lang][id] ?? el.textContent;
+      });
+
+      const menuList = document.getElementById("menuList");
+      menuList.innerHTML = "";
+      (data[lang].menuList || []).forEach(item=>{
+        const li = document.createElement("li");
+        li.textContent = item;
+        menuList.appendChild(li);
+      });
+
+      const communityList = document.getElementById("communityList");
+      communityList.innerHTML = "";
+      (data[lang].communityList || []).forEach(item=>{
+        const li = document.createElement("li");
+        li.textContent = item;
+        communityList.appendChild(li);
+      });
+
+      document.documentElement.lang = lang;
+    }
+
+    document.getElementById("btnJa").addEventListener("click", ()=>setLang("ja"));
+    document.getElementById("btnEn").addEventListener("click", ()=>setLang("en"));
+
+    // default language
+    setLang("ja");
+
+    // ===== Gallery slider logic =====
+    (function(){
+      const slidesEl = document.getElementById("slides");
+      const dotsEl = document.getElementById("dots");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      if(!slidesEl || !dotsEl) return;
+
+      const slideCount = slidesEl.children.length;
+      let index = 0;
+      let timer = null;
+      const intervalMs = 4500;
+
+      function slideWidth(){
+        return slidesEl.getBoundingClientRect().width;
+      }
+
+      function goTo(i, smooth=true){
+        index = (i + slideCount) % slideCount;
+        const x = index * slideWidth();
+        slidesEl.scrollTo({ left: x, behavior: smooth ? "smooth" : "auto" });
+        updateDots();
+      }
+
+      function updateDots(){
+        const btns = dotsEl.querySelectorAll(".dotbtn");
+        btns.forEach((b, i)=> b.classList.toggle("active", i === index));
+      }
+
+      function buildDots(){
+        dotsEl.innerHTML = "";
+        for(let i=0;i<slideCount;i++){
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "dotbtn" + (i===0 ? " active" : "");
+          b.setAttribute("aria-label", "Go to slide " + (i+1));
+          b.addEventListener("click", ()=>{ stop(); goTo(i); start(); });
+          dotsEl.appendChild(b);
+        }
+      }
+
+      function start(){
+        stop();
+        timer = setInterval(()=> goTo(index+1), intervalMs);
+      }
+      function stop(){
+        if(timer){ clearInterval(timer); timer = null; }
+      }
+
+      // Sync index when user swipes
+      let scrollRaf = null;
+      slidesEl.addEventListener("scroll", ()=>{
+        if(scrollRaf) cancelAnimationFrame(scrollRaf);
+        scrollRaf = requestAnimationFrame(()=>{
+          const w = slideWidth();
+          const i = Math.round(slidesEl.scrollLeft / w);
+          if(i !== index){
+            index = i;
+            updateDots();
+          }
+        });
+      });
+
+      prevBtn && prevBtn.addEventListener("click", ()=>{ stop(); goTo(index-1); start(); });
+      nextBtn && nextBtn.addEventListener("click", ()=>{ stop(); goTo(index+1); start(); });
+
+      slidesEl.addEventListener("mouseenter", stop);
+      slidesEl.addEventListener("mouseleave", start);
+      slidesEl.addEventListener("touchstart", stop, {passive:true});
+      slidesEl.addEventListener("touchend", start, {passive:true});
+
+      window.addEventListener("resize", ()=> goTo(index, false));
+
+      buildDots();
+      goTo(0, false);
+      start();
+    })();
+  </script>
+</body>
+</html>
